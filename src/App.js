@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Search from "./components/Search";
+import Results from "./components/Results";
 
 function App() {
   const [state, setState] = useState({
@@ -14,8 +16,13 @@ function App() {
 
   const search = (event) => {
     if (event.key === "Enter") {
-      fetch(apiurl + "&s=" + state.s).then((data) => {
+      axios(apiurl + "&s=" + state.s).then(({data}) => {
         console.log(data);
+        let results = data.Search;
+
+        setState(prevState => {
+          return { ...prevState, results: results}
+        });
       });
     }
   };
@@ -41,6 +48,7 @@ function App() {
 
       <main>
         <Search handleInput={handleInput} search={search} />
+        <Results results={state.results}/>
       </main>
     </div>
   );
