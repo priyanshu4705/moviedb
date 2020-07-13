@@ -12,7 +12,7 @@ function Results({ results, openPopup }) {
             }
         </section>
     )
-    else return (<div>Movie not found</div>)
+    else return (<div className="not-found">Please enter a movie name</div>)
 }
 
 export default Results

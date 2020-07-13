@@ -57,6 +57,16 @@ section{
   box-shadow: 0px 0px 8px 3px #4483C4;
 }
 
+.not-found{
+  display: block;
+  width: 100%;
+  padding: 20px 0px 0px 65px;
+
+  color: #FFF;
+  font-size: 20px;
+  font-weight: 300;
+}
+
 .results{
   display: flex;
   flex-wrap: wrap;
