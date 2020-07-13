@@ -1,22 +1,47 @@
-import React from 'react';
-import Search from "./components/Search"
+import React, { useState } from "react";
+import Search from "./components/Search";
 
 function App() {
+  const [state, setState] = useState({
+    s: "",
+    results: [],
+    selected: {},
+  });
 
-  
+  //external database api is used only 1000 searches allowed daily for deveplopment pusposes
+  //for unlimited search there is a paid version
+  const apiurl = "http://www.omdbapi.com/?apikey=3e97c3b1";
 
+  const search = (event) => {
+    if (event.key === "Enter") {
+      fetch(apiurl + "&s=" + state.s).then((data) => {
+        console.log(data);
+      });
+    }
+  };
+
+  //It stores the present input in search bar and changes search input from the previous search input
+
+  const handleInput = (event) => {
+    let s = event.target.value;
+
+    setState((prevState) => {
+      return { ...prevState, s: s };
+    });
+  };
+
+  //components of the app 1.Header(title of app)
+  //2.Search bar which is a totally different file 2 props are given
 
   return (
     <div className="App">
-
       <header>
-        <h1>Movie DataBase🎥</h1>
+        <h1>Movie DataBase</h1>
       </header>
 
       <main>
-        <Search />
+        <Search handleInput={handleInput} search={search} />
       </main>
-
     </div>
   );
 }
