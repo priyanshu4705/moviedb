@@ -1,12 +1,22 @@
 import React from 'react';
-import './App.css';
+import Search from "./components/Search"
 
 function App() {
+
+  
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        Hello World....🔥
+
+      <header>
+        <h1>Movie DataBase🎥</h1>
       </header>
+
+      <main>
+        <Search />
+      </main>
+
     </div>
   );
 }
