@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import axios from "axios";
 import Search from "./components/Search";
-import Results from "./components/Results";
-import Popup from "./components/Popup"
+
+const Popup  = lazy(()=> import("./components/Popup"));
+const Results = lazy(() => import("./components/Results"));
 
 function App() {
   const [state, setState] = useState({
@@ -13,16 +14,15 @@ function App() {
 
   //external database api is used only 1000 searches allowed daily for deveplopment pusposes
   //for unlimited search there is a paid version
-  const apiurl = "http://www.omdbapi.com/?apikey=3e97c3b1";
+  const apiurl = "https://www.omdbapi.com/?apikey=3e97c3b1";
 
   const search = (event) => {
     if (event.key === "Enter") {
-      axios(apiurl + "&s=" + state.s).then(({data}) => {
-        console.log(data);
+      axios(apiurl + "&s=" + state.s).then(({ data }) => {
         let results = data.Search;
 
         setState(prevState => {
-          return { ...prevState, results: results}
+          return { ...prevState, results: results }
         });
       });
     }
@@ -38,20 +38,20 @@ function App() {
     });
   };
 
-  const openPopup = id =>{
-    axios(apiurl + "&i= "+id).then(({data})=>{
+  const openPopup = id => {
+    axios(apiurl + "&i= " + id).then(({ data }) => {
       let result = data;
       setState(prevState => {
-        return { ...prevState,selected: result}
+        return { ...prevState, selected: result }
       });
     });
   }
 
-  const closePopup = () =>{
-    setState(prevState =>{
-      return { ...prevState,selected:{}}
+  const closePopup = () => {
+    setState(prevState => {
+      return { ...prevState, selected: {} }
     });
-  } 
+  }
 
   //components of the app 1.Header(title of app)
   //2.Search bar which is a totally different file 2 props are given
@@ -64,10 +64,11 @@ function App() {
 
       <main>
         <Search handleInput={handleInput} search={search} />
-        <Results results={state.results} openPopup={openPopup}/>
-
-        {(typeof state.selected.Title != "undefined") ? 
-            <Popup selected={state.selected} closePopup={closePopup}/> : false}
+        <Suspense fallback={<div className="loading"><h1> Loading Movies...</h1></div>}>
+          <Results results={state.results} openPopup={openPopup} />
+          {(typeof state.selected.Title != "undefined") ?
+            <Popup selected={state.selected} closePopup={closePopup} /> : false}
+        </Suspense>
       </main>
     </div>
   );
