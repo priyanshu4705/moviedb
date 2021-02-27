@@ -66,8 +66,10 @@ function App() {
         <Search handleInput={handleInput} search={search} />
         <Suspense fallback={<div className="loading"><h1> Loading Movies...</h1></div>}>
           <Results results={state.results} openPopup={openPopup} />
+          <Suspense fallback={<div className="loading"><h1> Loading Movies...</h1></div>}>
           {(typeof state.selected.Title != "undefined") ?
-            <Popup selected={state.selected} closePopup={closePopup} /> : false}
+              <Popup selected={state.selected} closePopup={closePopup} /> : false}
+          </Suspense>
         </Suspense>
       </main>
     </div>
